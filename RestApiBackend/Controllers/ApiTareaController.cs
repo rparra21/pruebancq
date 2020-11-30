@@ -67,14 +67,6 @@ namespace RestApiBackend.Controllers
             {
                 List<Tarea> resultado = new List<Tarea>();
                 resultado = FiltrarTareas(colaboradorId, estado, prioridad, fechaInicio, fechaFin);
-                //if (colaboradorId == 0 && estado == "Todos" && prioridad == "Todos")
-                //{
-                
-                //resultado = _context.Tareas.Where(x => x.ColaboradorId == colaboradorId && x.Estado == estado &&
-                //                                       x.Prioridad == prioridad && x.FechaInicio >= fechaInicio && 
-                //                                       x.FechaFin <= fechaFin).OrderBy(x => x.FechaInicio).Include("Colaborador").ToList();
-                //}
-
 
                 if (resultado == null)
                 {
