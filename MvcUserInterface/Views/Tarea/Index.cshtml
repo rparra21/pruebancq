@@ -1,0 +1,129 @@
+﻿@model IEnumerable<MvcUserInterface.Models.ListaTarea>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            @Html.Label("ddlColaboradores", "Colaborador")
+            @Html.DropDownList("ddlColaboradores", ViewBag.Colaboradores as SelectList, new { @class = "form-control" })
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            @Html.Label("ddlEstados", "Estado")
+            @Html.DropDownList("ddlEstados", ViewBag.Estados as SelectList, new { @class = "form-control" })
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            @Html.Label("ddlPrioridades", "Prioridad")
+            @Html.DropDownList("ddlPrioridades", ViewBag.Prioridades as SelectList, new { @class = "form-control" })
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            @Html.Label("FechaInicio", "Fecha Inicio")
+            @Html.EditorFor(model => model.FirstOrDefault().FechaInicio, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            @Html.Label("FechaFin", "Fecha Fin")
+            @Html.EditorFor(model => model.FirstOrDefault().FechaFin, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <br />
+            <input type="submit" value="Filtrar" class="btn btn-primary" />
+        </div>
+    </div>
+}
+<br />
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-2 form-check">
+        @Html.CheckBox("ActivoTodos", false)
+        @Html.Label("ActivoTodos", "Mostrar todas")
+
+    </div>
+</div>
+<br />
+<p>
+    @Html.ActionLink("Agregar Tarea", "Agregar")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Colaborador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prioridad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaInicio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaFin)
+        </th>
+        <th>
+            Acciones
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colaborador.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prioridad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFin)
+            </td>
+
+            <td>
+                @if (item.Estado == "Pendiente" || item.Estado == "En Proceso")
+                {
+                    @Html.ActionLink("Editar", "Editar", new { id = item.TareaId })
+                } |
+                @if (item.Estado != "En Proceso")
+                {
+                    @Html.ActionLink("Eliminar", "Eliminar", new { id = item.TareaId }, new { @class = "eliminarTarea" })
+                }
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+@section scripts{
+    <script>
+        $(".eliminarTarea").click(function (event) {
+            if (!confirm('¿Está seguro de eliminar la tarea?')) {
+                event.preventDefault();
+            }
+        });
+
+        $(function () {
+            $('#ActivoTodos').change(function () {
+                if ($('#ActivoTodos').prop('checked')) {
+                    location.href = '@Url.Action("Index", "Tarea")';
+                }
+            });
+        });
+    </script>
+}
